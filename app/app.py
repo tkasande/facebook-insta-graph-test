@@ -3,7 +3,7 @@ from routers.facebook import fb
 from routers.instagram import insta
 from fastapi import Response, Depends
 from uuid import UUID, uuid4
-from models import SessionData, UserData
+from models import UserData
 from session import backend, cookie, verifier
 
 app = FastAPI(
