@@ -7,3 +7,7 @@ class UserData(BaseModel):
 
 class PageToken(BaseModel):
     page_access_token: str
+
+class CommentReply(BaseModel):
+    message: str
+    page_access_token: str

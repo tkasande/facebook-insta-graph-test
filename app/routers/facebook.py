@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi import Depends
 from session import cookie, verifier
-from models import UserData, PageToken
+from models import UserData, PageToken, CommentReply
 import requests
 
 
@@ -69,3 +69,18 @@ async def get_fb_comments(post_id,  token: PageToken, user_data: UserData = Depe
 
     comments = [extract_comment(item) for item in data]
     return comments
+
+
+@fb.post('/fb/{comment_id}/reply', dependencies=[Depends(cookie)])
+async def reply_to_comment(comment_id, reply: CommentReply, user_data: UserData = Depends(verifier)):
+    url = base_url + comment_id + '/comments'
+    param = dict()
+    param['access_token'] = reply.page_access_token
+
+    data = {'message': reply.message}
+    res = requests.post(url, json=data, params=param)
+
+    response = {'id': res.json()['id'],
+                'message': reply.message}
+
+    return response
